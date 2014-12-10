@@ -53,6 +53,22 @@ and then
 hr --conf conf.json
 ```
 
+#### combined
+If the same option is provided by cli flag and json config, one from cli will survive.
+
+Example of json config:
+```
+{
+	"cmd": "go run main.go",
+	"watch": ["/some/path", "/some/other/path"],
+	"ignore": ["/some/ignored/path"]
+}
+```
+and then
+```
+hr --conf conf.json --port 3000
+```
+
 # TODO
 - **tests**
 
