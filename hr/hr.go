@@ -65,9 +65,6 @@ func main() {
 
 	}
 
-	watch = makeAbsPaths(watch)
-	ignore = makeAbsPaths(ignore)
-
 	if len(*_cmd) > 0 {
 		cmd = strings.Split(*_cmd, " ")
 	}
@@ -84,6 +81,9 @@ func main() {
 		port = *_port
 	}
 
+	watch = makeAbsPaths(watch)
+	ignore = makeAbsPaths(ignore)
+
 	pm := processManager{
 		port: port,
 		cmd:  cmd[0],
@@ -94,6 +94,13 @@ func main() {
 	pm.killOnPort(false)
 
 	log.Printf("will run with '%s' command", cmd)
+	for _, val := range watch {
+		log.Println("watching: " + val)
+	}
+
+	for _, val := range ignore {
+		log.Println("ignoring: " + val)
+	}
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
