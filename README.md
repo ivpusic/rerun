@@ -3,6 +3,12 @@ go-hotreload
 
 Recompiling and rerunning go apps when source changes
 
+## Features
+- specify list of files/directories to watch
+- specify list of files/directories to ignore
+- provide command which will be run on start/restart
+- configuration using cli-flags and/or json file
+
 ### How to install?
 ```shell
 go get github.com/ivpusic/go-hotreload/hr
