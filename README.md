@@ -33,7 +33,7 @@ Let we say you have your app running on port 3000, you want to run your program 
 
 You can provide configuration using command line flags, using ``json`` config, or combined, where command line args has bigger priority.
 
-##### using cli flags
+#### using cli flags
 ```
 hr --port 3000 --cmd "go run main.go" --watch /some/path,/some/other/path --ignore /some/ignored/path
 ```
