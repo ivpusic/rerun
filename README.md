@@ -42,17 +42,12 @@ You can provide configuration using command line flags, using ``json`` config, o
 
 #### - using cli flags
 ```
-hr --port 3000 --cmd "go run main.go" --watch /some/path,/some/other/path --ignore /some/ignored/path
-```
-
-Note that you can also use short version of cli flags. So we could write commans as:
-```
-hr --port 3000 -c "go run main.go" -w /some/path,/some/other/path -i /some/ignored/path
+hr -p 3000 -c "go run main.go" -w /some/path,/some/other/path -i /some/ignored/path
 ```
 
 You have troubles? Use verbose mode! You will see a lot of usefull information about go-hotreload internals.
 ```
-hr -v --port 3000 -c "go run main.go" -w /some/path,/some/other/path -i /some/ignored/path
+hr -v -p 3000 -c "go run main.go" -w /some/path,/some/other/path -i /some/ignored/path
 ```
 
 #### - using json config
@@ -83,7 +78,7 @@ Example of json config:
 ```
 and then
 ```
-hr --conf conf.json --port 3000
+hr --conf conf.json -p 3000
 ```
 
 # TODO
