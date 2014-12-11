@@ -28,8 +28,9 @@ Flags:
   -p, --port=PORT      Port on which app is running. Default: 3000
   --conf=CONF          Path to json config. Default: ''
   --version            Show application version.
+```
 
-To run with default settings just run
+To run with default settings just type
 ```
 hr
 ```
