@@ -7,10 +7,11 @@ import (
 )
 
 type config struct {
-	Port   int
-	Watch  []string
-	Ignore []string
-	Cmd    string
+	Port    int
+	Watch   []string
+	Ignore  []string
+	Cmd     string
+	Verbose bool
 }
 
 func parseConf(path string) (*config, error) {

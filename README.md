@@ -20,14 +20,14 @@ hr --help
 usage: hr [<flags>]
 
 Flags:
-  --help           Show help.
-  --cmd=CMD        Command to execute on each reload. Default: 'go run main.go'
-  --watch=WATCH    Comma separated list of directories to watch. Default: ['.']
-  --ignore=IGNORE  Comma separated list of directories to ignore. Default: []
-  --port=PORT      Port on which app is running. Default: 3000
-  --conf=CONF      Path to json config. Default: ''
-  --version        Show application version.
-```
+  --help               Show help.
+  -v, --verbose        Verbose mode. Default: false
+  -c, --cmd=CMD        Command to execute on each reload. Default: 'go run main.go'
+  -w, --watch=WATCH    Comma separated list of directories to watch. Default: ['.']
+  -i, --ignore=IGNORE  Comma separated list of directories to ignore. Default: []
+  -p, --port=PORT      Port on which app is running. Default: 3000
+  --conf=CONF          Path to json config. Default: ''
+  --version            Show application version.
 
 To run with default settings just run
 ```
@@ -42,6 +42,16 @@ You can provide configuration using command line flags, using ``json`` config, o
 #### - using cli flags
 ```
 hr --port 3000 --cmd "go run main.go" --watch /some/path,/some/other/path --ignore /some/ignored/path
+```
+
+Note that you can also use short version of cli flags. So we could write commans as:
+```
+hr --port 3000 -c "go run main.go" -w /some/path,/some/other/path -i /some/ignored/path
+```
+
+You have troubles? Use verbose mode! You will see a lot of usefull information about go-hotreload internals.
+```
+hr -v --port 3000 -c "go run main.go" -w /some/path,/some/other/path -i /some/ignored/path
 ```
 
 #### - using json config

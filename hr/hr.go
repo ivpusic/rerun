@@ -2,18 +2,22 @@ package main
 
 import (
 	"github.com/howeyc/fsnotify"
+	"github.com/ivpusic/golog"
 	"gopkg.in/alecthomas/kingpin.v1"
-	"log"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
 var (
-	_cmd    = kingpin.Flag("cmd", "Command to execute on each reload. Default: 'go run main.go'").String()
-	_watch  = kingpin.Flag("watch", "Comma separated list of directories to watch. Default: ['.']").String()
-	_ignore = kingpin.Flag("ignore", "Comma separated list of directories to ignore. Default: []").String()
-	_port   = kingpin.Flag("port", "Port on which app is running. Default: 3000").Int()
-	_conf   = kingpin.Flag("conf", "Path to json config. Default: ''").String()
+	_verbose = kingpin.Flag("verbose", "Verbose mode. It will show internal messages of go-hotreload. Default: false").Short('v').Bool()
+	_cmd     = kingpin.Flag("cmd", "Command to execute on each reload. Default: 'go run main.go'").Short('c').String()
+	_watch   = kingpin.Flag("watch", "Comma separated list of directories to watch. Default: ['.']").Short('w').String()
+	_ignore  = kingpin.Flag("ignore", "Comma separated list of directories to ignore. Default: []").Short('i').String()
+	_port    = kingpin.Flag("port", "Port on which app is running. Default: 3000").Short('p').Int()
+	_conf    = kingpin.Flag("conf", "Path to json config. Default: ''").String()
+	verbose  = false
+	logger   = golog.GetLogger("github.com/ivpusic/go-hotreload/hr")
 )
 
 func makeAbsPaths(paths []string) []string {
@@ -42,8 +46,20 @@ func contains(arr []string, path string) bool {
 	return false
 }
 
+func log(msg string) {
+	if verbose {
+		logger.Info(msg)
+	}
+}
+
+func logErr(msg string) {
+	if verbose {
+		logger.Error(msg)
+	}
+}
+
 func main() {
-	kingpin.Version("0.0.1")
+	kingpin.Version("0.0.2")
 	kingpin.Parse()
 
 	cmd := []string{"go", "run", "main.go"}
@@ -55,14 +71,14 @@ func main() {
 	if len(confPath) > 0 {
 		conf, err := parseConf(confPath)
 		if err != nil {
-			log.Fatal(err)
+			logErr(err.Error())
 		}
 
 		cmd = strings.Split(conf.Cmd, " ")
 		watch = conf.Watch
 		ignore = conf.Ignore
 		port = conf.Port
-
+		verbose = conf.Verbose
 	}
 
 	if len(*_cmd) > 0 {
@@ -81,6 +97,10 @@ func main() {
 		port = *_port
 	}
 
+	if *_verbose {
+		verbose = *_verbose
+	}
+
 	watch = makeAbsPaths(watch)
 	ignore = makeAbsPaths(ignore)
 
@@ -93,18 +113,19 @@ func main() {
 	// if there is old process listening on specified port, kill it
 	pm.killOnPort(false)
 
-	log.Printf("will run with '%s' command", cmd)
+	log("will run with" + strings.Join(cmd, " ") + " command")
+	log("will listen on port " + strconv.Itoa(port))
 	for _, val := range watch {
-		log.Println("watching: " + val)
+		log("watching: " + val)
 	}
 
 	for _, val := range ignore {
-		log.Println("ignoring: " + val)
+		log("ignoring: " + val)
 	}
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		log.Fatal(err)
+		logger.Panic(err.Error())
 	}
 
 	done := make(chan bool)
@@ -119,13 +140,15 @@ func main() {
 				if strings.Contains(file, ".go") {
 					abs, err := filepath.Abs(file)
 					if err == nil && contains(watch, abs) && !contains(ignore, abs) {
-						log.Println("reloading...")
+						logger.Info("reloading...")
 						pm.stop()
 						pm.run()
+					} else {
+						log("ignoring change on file: " + file)
 					}
 				}
 			case err := <-watcher.Error:
-				log.Println("error:", err)
+				logErr("error: " + err.Error())
 				done <- true
 			}
 		}
@@ -134,12 +157,12 @@ func main() {
 	for _, val := range watch {
 		err = watcher.Watch(val)
 		if err != nil {
-			log.Panic(err)
+			logErr("error: " + err.Error())
 		}
 	}
 
 	pm.run()
-	log.Print("watching for changes...")
+	log("watching for changes...")
 
 	<-done
 	watcher.Close()
