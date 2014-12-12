@@ -140,7 +140,7 @@ func main() {
 				if strings.Contains(file, ".go") {
 					abs, err := filepath.Abs(file)
 					if err == nil && contains(watch, abs) && !contains(ignore, abs) {
-						logger.Info("reloading...")
+						log("reloading...")
 						pm.stop()
 						pm.run()
 					} else {
@@ -162,7 +162,9 @@ func main() {
 	}
 
 	pm.run()
-	log("watching for changes...")
+	logger.Info("go-hotreload started.")
+	logger.Info("Watching for changes.")
+	logger.Info("Use -v flag for verbose mode")
 
 	<-done
 	watcher.Close()
