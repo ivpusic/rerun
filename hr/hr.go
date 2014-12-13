@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/howeyc/fsnotify"
 	"github.com/ivpusic/golog"
 	"gopkg.in/alecthomas/kingpin.v1"
+	"gopkg.in/fsnotify.v1"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -134,9 +134,8 @@ func main() {
 	go func() {
 		for {
 			select {
-			case ev := <-watcher.Event:
+			case ev := <-watcher.Events:
 				file := ev.Name
-
 				if strings.Contains(file, ".go") {
 					abs, err := filepath.Abs(file)
 					if err == nil && contains(watch, abs) && !contains(ignore, abs) {
@@ -147,7 +146,7 @@ func main() {
 						log("ignoring change on file: " + file)
 					}
 				}
-			case err := <-watcher.Error:
+			case err := <-watcher.Errors:
 				logErr("error: " + err.Error())
 				done <- true
 			}
@@ -155,7 +154,7 @@ func main() {
 	}()
 
 	for _, val := range watch {
-		err = watcher.Watch(val)
+		err = watcher.Add(val)
 		if err != nil {
 			logErr("error: " + err.Error())
 		}
