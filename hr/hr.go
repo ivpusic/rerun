@@ -163,7 +163,10 @@ func main() {
 	pm.run()
 	logger.Info("go-hotreload started.")
 	logger.Info("Watching for changes.")
-	logger.Info("Use -v flag for verbose mode")
+
+	if !verbose {
+		logger.Info("Use -v flag for verbose mode")
+	}
 
 	<-done
 	watcher.Close()
