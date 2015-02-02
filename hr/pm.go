@@ -22,7 +22,7 @@ func (pm *processManager) killOnPort(showerr bool) {
 	out, err := proc.Output()
 	if err != nil {
 		if showerr {
-			logErr("Error while executing fuser command! " + err.Error())
+			logger.Error("Error while executing fuser command! " + err.Error())
 		}
 		return
 	}
@@ -31,7 +31,7 @@ func (pm *processManager) killOnPort(showerr bool) {
 	pid, err := strconv.Atoi(_pid)
 	if err != nil {
 		if showerr {
-			logErr("Error while converting pid to integer! " + err.Error())
+			logger.Error("Error while converting pid to integer! " + err.Error())
 		}
 		return
 	}
@@ -39,7 +39,7 @@ func (pm *processManager) killOnPort(showerr bool) {
 	pidProc, err := os.FindProcess(pid)
 	if err != nil {
 		if showerr {
-			logErr("Error while finding process with pid " + _pid + "! " + err.Error())
+			logger.Error("Error while finding process with pid " + _pid + "! " + err.Error())
 		}
 		return
 	}
@@ -58,7 +58,7 @@ func (pm *processManager) run() {
 
 	err := pm.oscmd.Start()
 	if err != nil {
-		logErr(err.Error())
+		logger.Error(err.Error())
 	}
 }
 

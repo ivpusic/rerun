@@ -46,12 +46,6 @@ func contains(arr []string, path string) bool {
 	return false
 }
 
-func logErr(msg string) {
-	if verbose {
-		logger.Error(msg)
-	}
-}
-
 func main() {
 	kingpin.Version("0.0.2")
 	kingpin.Parse()
@@ -65,7 +59,7 @@ func main() {
 	if len(confPath) > 0 {
 		conf, err := parseConf(confPath)
 		if err != nil {
-			logErr(err.Error())
+			logger.Error(err.Error())
 		}
 
 		cmd = strings.Split(conf.Cmd, " ")
@@ -147,7 +141,7 @@ func main() {
 					}
 				}
 			case err := <-watcher.Errors:
-				logErr("error: " + err.Error())
+				logger.Error("error: " + err.Error())
 				done <- true
 			}
 		}
@@ -156,7 +150,7 @@ func main() {
 	for _, val := range watch {
 		err = watcher.Add(val)
 		if err != nil {
-			logErr("error: " + err.Error())
+			logger.Error("error: " + err.Error())
 		}
 	}
 
