@@ -49,7 +49,7 @@ func (pm *processManager) killOnPort(showerr bool) {
 
 // will run defined command
 func (pm *processManager) run() {
-	log("starting process")
+	logger.Debug("starting process")
 
 	pm.oscmd = exec.Command(pm.cmd, pm.args...)
 	pm.oscmd.Stdout = os.Stdout
@@ -63,7 +63,7 @@ func (pm *processManager) run() {
 }
 
 func (pm *processManager) stop() {
-	log("stopping process")
+	logger.Debug("stopping process")
 
 	if pm.oscmd == nil {
 		return

@@ -46,12 +46,6 @@ func contains(arr []string, path string) bool {
 	return false
 }
 
-func log(msg string) {
-	if verbose {
-		logger.Info(msg)
-	}
-}
-
 func logErr(msg string) {
 	if verbose {
 		logger.Error(msg)
@@ -101,6 +95,12 @@ func main() {
 		verbose = *_verbose
 	}
 
+	if verbose {
+		logger.Level = golog.DEBUG
+	} else {
+		logger.Level = golog.INFO
+	}
+
 	watch = makeAbsPaths(watch)
 	ignore = makeAbsPaths(ignore)
 
@@ -113,14 +113,14 @@ func main() {
 	// if there is old process listening on specified port, kill it
 	pm.killOnPort(false)
 
-	log("will run with" + strings.Join(cmd, " ") + " command")
-	log("will listen on port " + strconv.Itoa(port))
+	logger.Debug("will run with" + strings.Join(cmd, " ") + " command")
+	logger.Debug("will listen on port " + strconv.Itoa(port))
 	for _, val := range watch {
-		log("watching: " + val)
+		logger.Debug("watching: " + val)
 	}
 
 	for _, val := range ignore {
-		log("ignoring: " + val)
+		logger.Debug("ignoring: " + val)
 	}
 
 	watcher, err := fsnotify.NewWatcher()
@@ -139,11 +139,11 @@ func main() {
 				if strings.Contains(file, ".go") {
 					abs, err := filepath.Abs(file)
 					if err == nil && contains(watch, abs) && !contains(ignore, abs) {
-						log("reloading...")
+						logger.Debug("reloading...")
 						pm.stop()
 						pm.run()
 					} else {
-						log("ignoring change on file: " + file)
+						logger.Debug("ignoring change on file: " + file)
 					}
 				}
 			case err := <-watcher.Errors:
