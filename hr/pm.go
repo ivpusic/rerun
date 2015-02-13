@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
@@ -18,7 +17,9 @@ type processManager struct {
 // will try to find PID of process which is runing on defined port
 // if it succeed it will kill it
 func (pm *processManager) killOnPort(showerr bool) {
-	proc := exec.Command("fuser", fmt.Sprintf("%d/tcp", pm.port))
+	addr := ":" + strconv.Itoa(pm.port)
+	proc := exec.Command("lsof", "-t", "-i", addr, "-s", "TCP:LISTEN")
+
 	out, err := proc.Output()
 	if err != nil {
 		if showerr {
