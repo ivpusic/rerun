@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"os"
 	"os/exec"
+	"runtime"
 	"strconv"
 	"strings"
 )
@@ -14,33 +16,56 @@ type processManager struct {
 	oscmd *exec.Cmd
 }
 
+func (pm *processManager) getPid() (int, error) {
+	addr := ":" + strconv.Itoa(pm.port)
+	scripts := os.Getenv("GOPATH") + "/src/github.com/ivpusic/go-hotreload/hr/scripts"
+	var command *exec.Cmd
+
+	if runtime.GOOS == "windows" {
+		command = exec.Command(scripts+"/getpid_win.bat", addr)
+	} else {
+		command = exec.Command("lsof", "-t", "-i", addr, "-s", "TCP:LISTEN")
+	}
+
+	out, err := command.Output()
+	if err != nil {
+		return 0, errors.New("Error while executing command! " + err.Error())
+	}
+
+	pidStr := strings.TrimSpace(string(out[:]))
+	// pid not found
+	if len(pidStr) == 0 {
+		return 0, nil
+	}
+
+	pid, err := strconv.Atoi(pidStr)
+	if err != nil {
+		return 0, errors.New("Error while converting pid to integer! " + err.Error())
+	}
+
+	return pid, nil
+}
+
 // will try to find PID of process which is runing on defined port
 // if it succeed it will kill it
 func (pm *processManager) killOnPort(showerr bool) {
-	addr := ":" + strconv.Itoa(pm.port)
-	proc := exec.Command("lsof", "-t", "-i", addr, "-s", "TCP:LISTEN")
-
-	out, err := proc.Output()
+	pid, err := pm.getPid()
 	if err != nil {
 		if showerr {
-			logger.Error("Error while executing fuser command! " + err.Error())
+			logger.Error("Error while finding process to kill! " + err.Error())
 		}
 		return
 	}
 
-	_pid := strings.TrimSpace(string(out[:]))
-	pid, err := strconv.Atoi(_pid)
-	if err != nil {
-		if showerr {
-			logger.Error("Error while converting pid to integer! " + err.Error())
-		}
+	if pid == 0 {
+		logger.Debug("PID not found!")
 		return
 	}
 
 	pidProc, err := os.FindProcess(pid)
 	if err != nil {
 		if showerr {
-			logger.Error("Error while finding process with pid " + _pid + "! " + err.Error())
+			logger.Error("Error while finding process to kill! " + err.Error())
 		}
 		return
 	}
