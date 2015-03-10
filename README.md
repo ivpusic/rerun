@@ -83,7 +83,6 @@ hr --conf conf.json -p 3000
 
 # TODO
 - **tests**
-- **Windows support**
 
 # License
 MIT
