@@ -8,6 +8,7 @@ Recompiling and rerunning go apps when source changes
 - specify list of files/directories to ignore
 - provide command which will be run on start/restart
 - configuration using cli-flags and/or json file
+- Cross-platform support (Linux, OSX, Windows)
 
 ### How to install?
 ```shell
