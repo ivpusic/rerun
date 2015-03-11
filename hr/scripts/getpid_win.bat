@@ -1,5 +1,11 @@
 @ECHO OFF
 
-call netstat -aon | c:\windows\system32\find.exe /i "listening" | c:\windows\system32\find.exe "%1" | gawk '{ print $5;exit }'
+setlocal
+set sys32dir=%SystemRoot%\system32
 
-exit 0
+for /F "tokens=5 delims= " %%i in ('%sys32dir%\netstat.exe -aon ^| %sys32dir%\find.exe /i "LISTENING" ^| %sys32dir%\find.exe "%1"') do (
+  echo %%i
+  goto end
+)
+:end
+exit /b 0
