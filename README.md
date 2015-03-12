@@ -37,16 +37,16 @@ hr
 ```
 
 ### Examples
-Let we say you have your app running on port 3000, you want to run your program with `go run main.go`, you want to listen `.go` files under `/some/path` and `/some/other/path` directories, and you want to ignore files on `/some/ignored/path` directory.
+Let we say you have your app running on port 3000, you run your app with `go run main.go`, you want to listen `.go` files under `/some/path` and `/some/other/path` directories, and you want to ignore files on `/some/ignored/path` directory.
 
-You can provide configuration using command line flags, using ``json`` config, or combined, where command line args has bigger priority.
+You can provide configuration using command line flags, using ``json`` config, or combined, where command line args have bigger priority.
 
 #### - using cli flags
 ```
 hr -p 3000 -c "go run main.go" -w /some/path,/some/other/path -i /some/ignored/path
 ```
 
-You have troubles? Use verbose mode! You will see a lot of usefull information about go-hotreload internals.
+You have troubles? Use verbose mode (``-v`` flag)! You will see a lot of usefull information about go-hotreload internals.
 ```
 hr -v -p 3000 -c "go run main.go" -w /some/path,/some/other/path -i /some/ignored/path
 ```
