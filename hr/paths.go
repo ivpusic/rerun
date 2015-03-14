@@ -14,6 +14,7 @@ func convertAbsolute(path string) (string, error) {
 	}
 }
 
+// takes an array of (maybe) relative paths and convert them to their absolute representatives
 func convertAbsolutes(paths []string) []string {
 	for ind, path := range paths {
 		if newPath, err := convertAbsolute(path); err == nil {

@@ -32,8 +32,7 @@ func contains(arr []string, path string) bool {
 }
 
 func main() {
-	fmt.Println("VERSION 1")
-	kingpin.Version("0.0.2")
+	kingpin.Version("0.0.3")
 	kingpin.Parse()
 
 	cmd := []string{"go", "run", "main.go"}
