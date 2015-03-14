@@ -10,8 +10,8 @@ import (
 
 var envSchemes = map[string]*regexp.Regexp{
 	"windows": regexp.MustCompile("%([a-zA-Z0-9]+)%"),
-	"linux":   regexp.MustCompile("$([a-zA-Z0-9]+)"),
-	"darwin":  regexp.MustCompile("$([a-zA-Z0-9]+)"),
+	"linux":   regexp.MustCompile("[$]([a-zA-Z0-9]+)"),
+	"darwin":  regexp.MustCompile("[$]([a-zA-Z0-9]+)"),
 }
 
 func convertAbsolute(path string) (string, error) {
