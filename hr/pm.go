@@ -18,10 +18,10 @@ type processManager struct {
 
 func (pm *processManager) getPid() (int, error) {
 	addr := ":" + strconv.Itoa(pm.port)
-	scripts := os.Getenv("GOPATH") + "/src/github.com/ivpusic/go-hotreload/hr/scripts"
 	var command *exec.Cmd
 
 	if runtime.GOOS == "windows" {
+		scripts := os.Getenv("GOPATH") + "/src/github.com/ivpusic/go-hotreload/hr/scripts"
 		command = exec.Command(scripts+"/getpid_win.bat", addr)
 	} else {
 		command = exec.Command("lsof", "-t", "-i", addr, "-s", "TCP:LISTEN")
