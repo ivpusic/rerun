@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/ivpusic/golog"
 	"gopkg.in/alecthomas/kingpin.v1"
 	"gopkg.in/fsnotify.v1"
@@ -20,22 +21,6 @@ var (
 	logger   = golog.GetLogger("github.com/ivpusic/go-hotreload/hr")
 )
 
-func makeAbsPaths(paths []string) []string {
-	abspaths := make([]string, len(paths), (cap(paths)+1)*2)
-
-	for ind, path := range paths {
-		abs, err := filepath.Abs(path)
-
-		if err == nil {
-			path = abs
-		}
-
-		abspaths[ind] = abs
-	}
-
-	return abspaths
-}
-
 func contains(arr []string, path string) bool {
 	for _, abs := range arr {
 		if strings.Index(path, abs) == 0 {
@@ -47,6 +32,7 @@ func contains(arr []string, path string) bool {
 }
 
 func main() {
+	fmt.Println("VERSION 1")
 	kingpin.Version("0.0.2")
 	kingpin.Parse()
 
@@ -58,8 +44,13 @@ func main() {
 	confPath := *_conf
 	if len(confPath) > 0 {
 		conf, err := parseConf(confPath)
+
 		if err != nil {
 			logger.Error(err.Error())
+			if conf == nil {
+				logger.Error("Terminating due to missing configuration file")
+				return
+			}
 		}
 
 		cmd = strings.Split(conf.Cmd, " ")
@@ -95,8 +86,8 @@ func main() {
 		logger.Level = golog.INFO
 	}
 
-	watch = makeAbsPaths(watch)
-	ignore = makeAbsPaths(ignore)
+	watch = convertAbsolutes(watch)
+	ignore = convertAbsolutes(ignore)
 
 	pm := processManager{
 		port: port,
@@ -130,7 +121,7 @@ func main() {
 			select {
 			case ev := <-watcher.Events:
 				file := ev.Name
-				if strings.Contains(file, ".go") {
+				if strings.HasSuffix(file, ".go") {
 					abs, err := filepath.Abs(file)
 					if err == nil && contains(watch, abs) && !contains(ignore, abs) {
 						logger.Debug("reloading...")
