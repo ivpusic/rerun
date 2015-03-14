@@ -82,6 +82,25 @@ and then
 hr --conf conf.json -p 3000
 ```
 
+#### - environment variables
+You can use environment variables inside your configurations.
+
+##### Linux/OSX
+```
+{
+    "cmd": "go run main.go",
+    "watch": ["$GOPATH/hello/how/are/you"]
+}
+```
+
+##### Windows
+```
+{
+    "cmd": "go run main.go",
+    "watch": ["%GOPATH%/hello/how/are/you"]
+}
+```
+
 # TODO
 - **tests**
 
