@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/ivpusic/golog"
 	"gopkg.in/alecthomas/kingpin.v1"
 	"gopkg.in/fsnotify.v1"

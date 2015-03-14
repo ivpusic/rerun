@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"runtime"
+	"path/filepath"
 )
 
 func convertAbsolute(path string) (string, error) {
