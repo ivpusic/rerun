@@ -12,8 +12,7 @@ import (
 type processManager struct {
 	port  int
 	cmd   string
-	args  []string
-	oscmd *exec.Cmd
+	oscmd []*exec.Cmd
 }
 
 func (pm *processManager) getPid() (int, error) {
@@ -32,18 +31,18 @@ func (pm *processManager) getPid() (int, error) {
 		return 0, errors.New("Error while executing command! " + err.Error())
 	}
 
-	pidStr := strings.TrimSpace(string(out[:]))
 	// pid not found
-	if len(pidStr) == 0 {
+	if pidStr := strings.TrimSpace(string(out[:])); len(pidStr) == 0 {
 		return 0, nil
+	} else {
+		pid, err := strconv.Atoi(pidStr)
+		if err != nil {
+			return 0, errors.New("Error while converting pid to integer! " + err.Error())
+		} else {
+			return pid, nil
+		}
 	}
 
-	pid, err := strconv.Atoi(pidStr)
-	if err != nil {
-		return 0, errors.New("Error while converting pid to integer! " + err.Error())
-	}
-
-	return pid, nil
 }
 
 // will try to find PID of process which is runing on defined port
@@ -73,18 +72,37 @@ func (pm *processManager) killOnPort(showerr bool) {
 	pidProc.Kill()
 }
 
+func removeEmpty(cmd []string) []string {
+	newInd := 0
+	newCmd := make([]string, len(cmd))
+	for _, str := range cmd {
+		if len(strings.TrimSpace(str)) != 0 {
+			newCmd[newInd] = str
+			newInd++
+		}
+	}
+	return newCmd
+}
+
 // will run defined command
 func (pm *processManager) run() {
 	logger.Debug("starting process")
 
-	pm.oscmd = exec.Command(pm.cmd, pm.args...)
-	pm.oscmd.Stdout = os.Stdout
-	pm.oscmd.Stdin = os.Stdin
-	pm.oscmd.Stderr = os.Stderr
+	cmds := strings.Split(pm.cmd, "&")
+	pm.oscmd = make([]*exec.Cmd, len(cmds))
 
-	err := pm.oscmd.Start()
-	if err != nil {
-		logger.Error(err.Error())
+	for ind, command := range cmds {
+		split := removeEmpty(strings.Split(command, " "))
+		pm.oscmd[ind] = exec.Command(split[0], split[1:]...)
+		pm.oscmd[ind].Stdout = os.Stdout
+		pm.oscmd[ind].Stdin = os.Stdin
+		pm.oscmd[ind].Stderr = os.Stderr
+		go func(ind int) {
+			err := pm.oscmd[ind].Start()
+			if err != nil {
+				logger.Error(err.Error())
+			}
+		}(ind)
 	}
 }
 
@@ -95,6 +113,8 @@ func (pm *processManager) stop() {
 		return
 	}
 
-	pm.oscmd.Process.Kill()
+	for _, cmd := range pm.oscmd {
+		cmd.Process.Kill()
+	}
 	pm.killOnPort(true)
 }

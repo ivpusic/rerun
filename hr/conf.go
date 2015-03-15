@@ -44,7 +44,7 @@ func loadConfiguration() {
 			}
 		}
 
-		cmd = strings.Split(conf.Cmd, " ")
+		cmd = conf.Cmd
 		watch = conf.Watch
 		ignore = conf.Ignore
 		port = conf.Port
@@ -52,7 +52,7 @@ func loadConfiguration() {
 	}
 
 	if len(*_cmd) > 0 {
-		cmd = strings.Split(*_cmd, " ")
+		cmd = *_cmd
 	}
 
 	if len(*_watch) > 0 {

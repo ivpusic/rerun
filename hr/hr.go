@@ -18,7 +18,7 @@ var (
 	_conf    = kingpin.Flag("conf", "Path to json config. Default: ''").String()
 	logger   = golog.GetLogger("github.com/ivpusic/go-hotreload/hr")
 
-	cmd     = []string{"go", "run", "main.go"}
+	cmd     = "go run main.go"
 	watch   = []string{"."}
 	ignore  = []string{}
 	port    = 3000
@@ -46,14 +46,13 @@ func main() {
 
 	pm := processManager{
 		port: port,
-		cmd:  cmd[0],
-		args: cmd[1:],
+		cmd:  cmd,
 	}
 
 	// if there is old process listening on specified port, kill it
 	pm.killOnPort(false)
 
-	logger.Debug("will run with" + strings.Join(cmd, " ") + " command")
+	logger.Debugf("will run with %q command", pm.cmd)
 	logger.Debug("will listen on port " + strconv.Itoa(port))
 	for _, val := range watch {
 		logger.Debug("watching: " + val)
