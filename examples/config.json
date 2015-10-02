@@ -1,0 +1,6 @@
+{
+	"root": ".",
+	"ignore": ["some/path/to/ignore"],
+	"args": ["dev"],
+	"suffixes": [".go", ".html", ".tpl"]
+}
