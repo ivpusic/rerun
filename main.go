@@ -40,8 +40,8 @@ func main() {
 		<-sigs
 
 		err := os.Remove(conf.build)
-		if err != nil {
-			logger.Errorf("Build file not removed! %s", err.Error())
+		if err != nil && !os.IsNotExist(err) {
+			logger.Warnf("Build file not removed! %s", err.Error())
 		}
 
 		os.Exit(0)
