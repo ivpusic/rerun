@@ -1,5 +1,6 @@
 rerun
 ============
+[![Build Status](https://travis-ci.org/ivpusic/rerun.svg?branch=master)](https://travis-ci.org/ivpusic/rerun)
 
 Recompiling and rerunning go apps when source changes
 
