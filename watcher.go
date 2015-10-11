@@ -123,7 +123,7 @@ func (w *watcher) start() {
 		}
 	}()
 
-	root, err := filepath.Abs(w.pm.conf.Root)
+	root, err := filepath.Abs(".")
 	if err != nil {
 		logger.Panicf("Error while looking for absolute application path! %s", err.Error())
 	}

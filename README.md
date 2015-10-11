@@ -23,7 +23,6 @@ usage: rerun [<flags>]
 Flags:
   --help               Show context-sensitive help (also try --help-long and --help-man).
   -v, --verbose        Verbose mode. It will show rerun internal messages. Default: false
-  -r, --root="."       Project Root.
   -i, --ignore=IGNORE  List of ignored files and directories.
   -a, --args=ARGS      Application arguments.
   -s, --suffixes=SUFFIXES  
@@ -41,7 +40,7 @@ rerun
 
 #### CLI flags
 ```
-rerun -r root -a arg1,arg2 -i bower_components,node_modules,test
+rerun -a arg1,arg2 -i bower_components,node_modules,test
 ```
 
 You have troubles? Use verbose mode (``-v`` flag)! You will see a lot of usefull information about rerun internals.
@@ -53,7 +52,6 @@ rerun -v
 Create json file with content, with name for example conf.json
 ```
 {
-	"root": ".",
 	"ignore": ["some/path/to/ignore1", "some/path/to/ignore2"],
 	"args": ["dev", "test"],
 	"suffixes": [".go", ".html", ".tpl"]
@@ -75,7 +73,7 @@ Example of json config:
 ```
 and then
 ```
-rerun --conf conf.json --root server
+rerun --conf conf.json
 ```
 
 #### ENV variables

@@ -13,7 +13,6 @@ import (
 
 var (
 	verbose  = kingpin.Flag("verbose", "Verbose mode. It will show rerun internal messages. Default: false").Short('v').Bool()
-	root     = kingpin.Flag("root", "Project Root.").Default(".").Short('r').String()
 	ignore   = kingpin.Flag("ignore", "List of ignored files and directories.").Default("").Short('i').String()
 	args     = kingpin.Flag("args", "Application arguments.").Default("").Short('a').String()
 	suffixes = kingpin.Flag("suffixes", "File suffixes to watch.").Short('s').String()
@@ -21,7 +20,6 @@ var (
 )
 
 type config struct {
-	Root     string
 	Ignore   []string
 	Args     []string
 	Suffixes []string
@@ -60,11 +58,6 @@ func loadConfiguration() (*config, error) {
 		}
 	}
 
-	// override configuration with CLI values if they exists
-	if len(*root) > 0 {
-		conf.Root = *root
-	}
-
 	if len(*ignore) > 0 {
 		conf.Ignore = append(conf.Ignore, strings.Split(*ignore, ",")...)
 	}
@@ -75,10 +68,6 @@ func loadConfiguration() (*config, error) {
 
 	if len(*suffixes) > 0 {
 		conf.Suffixes = append(conf.Suffixes, strings.Split(*suffixes, ",")...)
-	}
-
-	if len(conf.Root) == 0 {
-		conf.Root = "."
 	}
 
 	if len(conf.Suffixes) == 0 {
