@@ -59,7 +59,7 @@ Create json file with content, with name for example conf.json
 ```
 and then
 ```
-rerun --conf conf.json
+rerun -c conf.json
 ```
 
 #### CLI + JSON
@@ -73,7 +73,7 @@ Example of json config:
 ```
 and then
 ```
-rerun --conf conf.json
+rerun -a arg1,arg2 -c conf.json
 ```
 
 #### ENV variables
