@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -74,7 +75,7 @@ func loadConfiguration() (*config, error) {
 		conf.Suffixes = append(conf.Suffixes, ".go")
 	}
 
-	buildName := "application-build-" + time.Now().Format("20060102150405")
+	buildName := "application-build-" + strconv.FormatInt(time.Now().UnixNano(), 10)
 	if runtime.GOOS == "windows" {
 		buildName += ".exe"
 	}

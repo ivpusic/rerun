@@ -20,6 +20,8 @@ func (pm *processManager) run() {
 	logger.Debug("building application...")
 
 	start := time.Now()
+
+	os.Remove(pm.conf.build)
 	out, err := exec.Command("go", "build", "-o", pm.conf.build).CombinedOutput()
 
 	if err != nil {
