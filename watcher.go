@@ -25,7 +25,7 @@ func (w *watcher) isEventImportant(ev fsnotify.Event) bool {
 		return false
 	}
 
-	importantEvent := ev.Op == fsnotify.Write || ev.Op == fsnotify.Rename || ev.Op == fsnotify.Remove
+	importantEvent := ev.Op == fsnotify.Write || ev.Op == fsnotify.Rename || ev.Op == fsnotify.Remove || (*attrib && ev.Op == fsnotify.Chmod)
 	if !importantEvent {
 		return false
 	}

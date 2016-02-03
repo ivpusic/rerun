@@ -26,6 +26,15 @@ func TestIsFileImportant(t *testing.T) {
 	event = fsnotify.Event{"some/file.c", fsnotify.Write}
 	assert.False(t, watcher.isEventImportant(event))
 
+	// Test attrib event
+	event = fsnotify.Event{"some/file.go", fsnotify.Chmod}
+	assert.False(t, watcher.isEventImportant(event))
+
+	// Test attrib event in case settings are different
+	*attrib = true
+	event = fsnotify.Event{"some/file.go", fsnotify.Chmod}
+	assert.True(t, watcher.isEventImportant(event))
+
 	// all ok
 	event = fsnotify.Event{"some/file.go", fsnotify.Write}
 	assert.True(t, watcher.isEventImportant(event))

@@ -18,6 +18,7 @@ var (
 	args     = kingpin.Flag("args", "Application arguments.").Default("").Short('a').String()
 	suffixes = kingpin.Flag("suffixes", "File suffixes to watch.").Short('s').String()
 	confPath = kingpin.Flag("config", "JSON configuration location").Short('c').String()
+	attrib   = kingpin.Flag("attrib", "Also watch attribute changes").Short('b').Bool()
 )
 
 type config struct {
