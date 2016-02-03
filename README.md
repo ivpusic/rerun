@@ -28,6 +28,7 @@ Flags:
   -s, --suffixes=SUFFIXES  
                        File suffixes to watch.
   -c, --config=CONFIG  JSON configuration location
+  --attrib             Also listen to changes to file attributes.
   --version            Show application version.
 ```
 
@@ -54,7 +55,8 @@ Create json file with content, with name for example conf.json
 {
 	"ignore": ["some/path/to/ignore1", "some/path/to/ignore2"],
 	"args": ["dev", "test"],
-	"suffixes": [".go", ".html", ".tpl"]
+	"suffixes": [".go", ".html", ".tpl"],
+    "attrib": true
 }
 ```
 and then
@@ -99,6 +101,16 @@ You can use environment variables inside your configurations.
 	"ignore": ["/some/path", "/some/other/**/*.go"]
 }
 ```
+
+#### Use with Vagrant
+
+If you are using Vagrant as your development environment, the edited changes do not fire the notify events on the guest side - meaning that rerun cannot detect the changes.  However, if you install the vagrant-notify-forwarder plugin from https://github.com/mhallin/vagrant-notify-forwarder, you can make rerun work together with it:
+
+    vagrant plugin install vagrant-notify-forwarder
+    
+Then, watch the files with
+
+    rerun --attrib -c conf.json
 
 # License
 MIT

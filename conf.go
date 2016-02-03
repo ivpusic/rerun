@@ -18,12 +18,14 @@ var (
 	args     = kingpin.Flag("args", "Application arguments.").Default("").Short('a').String()
 	suffixes = kingpin.Flag("suffixes", "File suffixes to watch.").Short('s').String()
 	confPath = kingpin.Flag("config", "JSON configuration location").Short('c').String()
+	attrib   = kingpin.Flag("attrib", "Also watch attribute changes").Bool()
 )
 
 type config struct {
 	Ignore   []string
 	Args     []string
 	Suffixes []string
+	Attrib   bool
 	build    string
 }
 
@@ -91,6 +93,8 @@ func loadConfiguration() (*config, error) {
 	// make absolute paths out of ignored files
 	conf.Ignore = parseGlobs(conf.Ignore)
 	conf.Ignore = convertAbsolutes(conf.Ignore)
+
+	conf.Attrib = *attrib
 
 	return conf, nil
 }
