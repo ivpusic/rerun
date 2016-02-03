@@ -18,13 +18,14 @@ func TestParseConf(t *testing.T) {
 	AssertArraysEq(t, []string{"some/path/to/ignore", "some/path/to/ignore"}, cnf.Ignore)
 	AssertArraysEq(t, []string{"dev", "test"}, cnf.Args)
 	AssertArraysEq(t, []string{".go", ".html", ".tpl"}, cnf.Suffixes)
+	assert.Equal(t, true, cnf.Attrib)
 }
 
 func TestParseConfWithCliArgs(t *testing.T) {
 	*ignore = "path1,path2"
 	*args = "arg1,arg2"
 	*suffixes = ".go,.html"
-	*attrib = true
+	*attrib = false
 
 	cnf, err := loadConfiguration()
 	assert.Nil(t, err, "Error should not happen if file is ok")
@@ -37,5 +38,5 @@ func TestParseConfWithCliArgs(t *testing.T) {
 	AssertArraysEq(t, []string{"arg1", "arg2"}, cnf.Args)
 	AssertArraysEq(t, []string{".go", ".html"}, cnf.Suffixes)
 
-	assert.True(t, cnf.Attrib)
+	assert.False(t, cnf.Attrib)
 }

@@ -77,6 +77,10 @@ func loadConfiguration() (*config, error) {
 		conf.Suffixes = append(conf.Suffixes, ".go")
 	}
 
+	if attrib != nil {
+		conf.Attrib = *attrib
+	}
+
 	buildName := "application-build-" + strconv.FormatInt(time.Now().UnixNano(), 10)
 	if runtime.GOOS == "windows" {
 		buildName += ".exe"
@@ -93,8 +97,6 @@ func loadConfiguration() (*config, error) {
 	// make absolute paths out of ignored files
 	conf.Ignore = parseGlobs(conf.Ignore)
 	conf.Ignore = convertAbsolutes(conf.Ignore)
-
-	conf.Attrib = *attrib
 
 	return conf, nil
 }
