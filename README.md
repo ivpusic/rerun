@@ -109,7 +109,7 @@ If you are using Vagrant as your development environment, the edited changes do 
     
 Then, watch the files with
 
-    rerun -b mypath
+    rerun -b -c conf.json
 
 # License
 MIT
