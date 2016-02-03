@@ -28,7 +28,7 @@ Flags:
   -s, --suffixes=SUFFIXES  
                        File suffixes to watch.
   -c, --config=CONFIG  JSON configuration location
-  -b, --attrib         Also listen to changes to file attributes.
+  --attrib             Also listen to changes to file attributes.
   --version            Show application version.
 ```
 
@@ -55,7 +55,8 @@ Create json file with content, with name for example conf.json
 {
 	"ignore": ["some/path/to/ignore1", "some/path/to/ignore2"],
 	"args": ["dev", "test"],
-	"suffixes": [".go", ".html", ".tpl"]
+	"suffixes": [".go", ".html", ".tpl"],
+    "attrib": true
 }
 ```
 and then
@@ -109,7 +110,7 @@ If you are using Vagrant as your development environment, the edited changes do 
     
 Then, watch the files with
 
-    rerun -b -c conf.json
+    rerun --attrib -c conf.json
 
 # License
 MIT

@@ -31,7 +31,7 @@ func TestIsFileImportant(t *testing.T) {
 	assert.False(t, watcher.isEventImportant(event))
 
 	// Test attrib event in case settings are different
-	*attrib = true
+	pm.conf.Attrib = true
 	event = fsnotify.Event{"some/file.go", fsnotify.Chmod}
 	assert.True(t, watcher.isEventImportant(event))
 
