@@ -131,8 +131,12 @@ func (w *watcher) start() {
 	err = filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if contains(w.pm.conf.Ignore, path) {
 			logger.Debugf("Ignoring %s\n", path)
-			return filepath.SkipDir
-		} else if info.IsDir() && !contains(w.pm.conf.Ignore, path) {
+			if info.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		if info.IsDir() {
 			return watcher.Add(path)
 		}
 
