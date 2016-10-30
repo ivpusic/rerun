@@ -64,6 +64,10 @@ and then
 rerun -c conf.json
 ```
 
+Rerun supports default config loading: if a file with name `.rerun.json`
+exists in your project directory (from whence you execute rerun) - it will
+be automatically loaded without a need to specify `-c` flag.
+
 #### CLI + JSON
 If the same option is provided by cli flag and json config, one from cli will survive.
 

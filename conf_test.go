@@ -33,8 +33,8 @@ func TestParseConfWithCliArgs(t *testing.T) {
 	assert.True(t, len(cnf.Ignore) >= 2)
 	pathPrefix := os.Getenv("GOPATH") + "/src/github.com/ivpusic/rerun"
 
-	assert.True(t, contains([]string{pathPrefix + "/path1", pathPrefix + "/path2"}, cnf.Ignore[0]))
-	assert.True(t, contains([]string{pathPrefix + "/path1", pathPrefix + "/path2"}, cnf.Ignore[1]))
+	assert.True(t, contains(cnf.Ignore, pathPrefix + "/path1"))
+	assert.True(t, contains(cnf.Ignore, pathPrefix + "/path2"))
 	AssertArraysEq(t, []string{"arg1", "arg2"}, cnf.Args)
 	AssertArraysEq(t, []string{".go", ".html"}, cnf.Suffixes)
 

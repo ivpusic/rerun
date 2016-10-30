@@ -8,8 +8,13 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"os"
 
 	"gopkg.in/alecthomas/kingpin.v2"
+)
+
+const (
+	defaultConfigPath string = ".rerun.json"
 )
 
 var (
@@ -27,6 +32,22 @@ type config struct {
 	Suffixes []string
 	Attrib   bool
 	build    string
+}
+
+func newConfig() (*config, error) {
+	if len(*confPath) > 0 {
+		return parseConf(*confPath)
+	}
+
+	if _, err := os.Stat(defaultConfigPath); err != nil {
+		if os.IsNotExist(err) {
+			return new(config), nil;
+		}
+
+		return nil, err
+	}
+
+	return parseConf(defaultConfigPath)
 }
 
 func parseConf(path string) (*config, error) {
@@ -50,15 +71,9 @@ func loadConfiguration() (*config, error) {
 		kingpin.Parse()
 	}
 
-	conf := &config{}
-	var err error
-
-	if len(*confPath) > 0 {
-		conf, err = parseConf(*confPath)
-
-		if err != nil {
-			return nil, err
-		}
+	conf, err := newConfig()
+	if err != nil {
+		return nil, err
 	}
 
 	if len(*ignore) > 0 {
