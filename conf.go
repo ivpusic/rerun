@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"runtime"
 	"strconv"
 	"strings"
 	"time"
-	"os"
 
 	"gopkg.in/alecthomas/kingpin.v2"
 )
@@ -23,6 +23,7 @@ var (
 	args     = kingpin.Flag("args", "Application arguments.").Default("").Short('a').String()
 	suffixes = kingpin.Flag("suffixes", "File suffixes to watch.").Short('s').String()
 	confPath = kingpin.Flag("config", "JSON configuration location").Short('c').String()
+	test     = kingpin.Flag("test", "Run tests").Short('t').Bool()
 	attrib   = kingpin.Flag("attrib", "Also watch attribute changes").Bool()
 )
 
@@ -30,6 +31,7 @@ type config struct {
 	Ignore   []string
 	Args     []string
 	Suffixes []string
+	Test     bool
 	Attrib   bool
 	build    string
 }
@@ -41,7 +43,7 @@ func newConfig() (*config, error) {
 
 	if _, err := os.Stat(defaultConfigPath); err != nil {
 		if os.IsNotExist(err) {
-			return new(config), nil;
+			return new(config), nil
 		}
 
 		return nil, err
@@ -90,6 +92,10 @@ func loadConfiguration() (*config, error) {
 
 	if len(conf.Suffixes) == 0 {
 		conf.Suffixes = append(conf.Suffixes, ".go")
+	}
+
+	if test != nil {
+		conf.Test = *test
 	}
 
 	if attrib != nil {

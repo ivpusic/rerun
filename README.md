@@ -21,15 +21,15 @@ go get github.com/ivpusic/rerun
 usage: rerun [<flags>]
 
 Flags:
-  --help               Show context-sensitive help (also try --help-long and --help-man).
-  -v, --verbose        Verbose mode. It will show rerun internal messages. Default: false
-  -i, --ignore=IGNORE  List of ignored files and directories.
-  -a, --args=ARGS      Application arguments.
-  -s, --suffixes=SUFFIXES  
-                       File suffixes to watch.
-  -c, --config=CONFIG  JSON configuration location
-  --attrib             Also listen to changes to file attributes.
-  --version            Show application version.
+  --help                   Show context-sensitive help (also try --help-long and --help-man).
+  -v, --verbose            Verbose mode. It will show rerun internal messages. Default: false
+  -i, --ignore=IGNORE      List of ignored files and directories.
+  -a, --args=ARGS          Application arguments.
+  -s, --suffixes=SUFFIXES  File suffixes to watch.
+  -c, --config=CONFIG      JSON configuration location
+  -t, --test               Run tests
+  --attrib                 Also listen to changes to file attributes.
+  --version                Show application version.
 ```
 
 To run with default settings just type
