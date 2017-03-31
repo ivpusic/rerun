@@ -12,7 +12,7 @@ type processManager struct {
 	oscmd *exec.Cmd
 }
 
-func (p *processManager) formatBuildTime(duration time.Duration) string {
+func (pm *processManager) formatBuildTime(duration time.Duration) string {
 	return fmt.Sprintf("%.2f(s)", duration.Seconds())
 }
 
@@ -32,6 +32,16 @@ func (pm *processManager) run() {
 
 	// build success, display build time
 	logger.Infof("build took %s", pm.formatBuildTime(time.Since(start)))
+
+	if pm.conf.Test {
+		testOut, testErr := exec.Command("go", "test").CombinedOutput()
+		if testErr != nil {
+			logger.Error("Tests failed!")
+			fmt.Printf("==========\n%s==========\n", testOut)
+		} else {
+			logger.Info("Tests OK!")
+		}
+	}
 
 	pm.oscmd = exec.Command(pm.conf.build, pm.conf.Args...)
 	pm.oscmd.Stdout = os.Stdout
