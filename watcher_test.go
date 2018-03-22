@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/fsnotify.v1"
+	"gopkg.in/fsnotify/fsnotify.v1"
 )
 
 func TestIsFileImportant(t *testing.T) {
